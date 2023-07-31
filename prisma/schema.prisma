@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["filteredRelationCount"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Permissions {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  read      Boolean  @default(false)
+  write     Boolean  @default(false)
+  update    Boolean  @default(false)
+  delete    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  deleted   Boolean  @default(false)
+}
+
+model Roles {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String       @unique
+  permissions Permission[]
+  users       Users[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+  deleted     Boolean      @default(false)
+}
+
+model Settings {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  key       String   @unique
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  deleted   Boolean  @default(false)
+}
+
+model Users {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  cognitoId       String          @unique
+  username        String          @unique
+  role            Roles           @relation(fields: [roleId], references: [id])
+  roleId          String          @db.ObjectId
+  name            String
+  phone           String?
+  email           String          @unique
+  registeredOn    DateTime        @default(now())
+  notifications   Notifications[]
+  avatar          File?
+  chatRoomIds     String[]        @db.ObjectId
+  messagesSeenIds String[]        @db.ObjectId
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  deleted         Boolean         @default(false)
+}
+
+model Notifications {
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  notificationType NotificationType
+  user             Users              @relation(fields: [userId], references: [id])
+  userId           String
+  title            String
+  message          String
+  status           NotificationStatus
+  url              String
+  profilesId       String?            @db.ObjectId
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  deleted          Boolean            @default(false)
+}
+
+enum NotificationType {
+  Info
+  Success
+  Danger
+}
+
+enum NotificationStatus {
+  Read
+  Unread
+}
+
+type Permission {
+  name   String
+  read   Boolean
+  write  Boolean
+  update Boolean
+  delete Boolean
+}
+
+type File {
+  name String
+  path String
+  type String
+  size Int
+}
