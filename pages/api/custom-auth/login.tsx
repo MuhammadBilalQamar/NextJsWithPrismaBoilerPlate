@@ -28,6 +28,6 @@ const checkUserCredentials = async (email: string, password: string) => {
         where: { email: email }
     });
     if (!user) return false;
-    const hashedPassword = user.password;
+    const hashedPassword = user?.password;
     return bcrypt.compareSync(password, hashedPassword);
 }
