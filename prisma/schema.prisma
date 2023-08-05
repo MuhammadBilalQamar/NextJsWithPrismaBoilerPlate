@@ -44,7 +44,6 @@ model Settings {
 
 model Users {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  cognitoId       String          @unique
   username        String          @unique
   password        String
   role            Roles           @relation(fields: [roleId], references: [id])

@@ -48,7 +48,6 @@ class usersAPI extends restHandlers {
 
   beforeInsert = async (req: NextApiRequest, body: any) => {
     const reqBody = req.body;
-    if (reqBody.cognitoId) body.cognitoId = reqBody.cognitoId;
     if (reqBody.username) body.username = reqBody.username;
     if (reqBody.role) body.role = { connect: { id: reqBody.role } } || null;
     if (reqBody.name) body.name = reqBody.name;

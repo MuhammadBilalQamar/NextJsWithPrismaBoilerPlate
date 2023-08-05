@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { CognitoAccessTokenPayload } from 'aws-jwt-verify/jwt-model';
 type Data = {
-  res: CognitoAccessTokenPayload | string;
+  res: any;
   success: boolean;
 };
 

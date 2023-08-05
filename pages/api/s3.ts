@@ -20,13 +20,3 @@ export default async function handler(
     res.status(400).json({});
   }
 }
-
-// code to sync users
-//const users = await getCognitoUsers();
-//   for (const u of users) {
-//     try {
-//       await fetch(`http://localhost:3000/api/sync-users/${u.id}`);
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   }
